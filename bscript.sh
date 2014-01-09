@@ -21,6 +21,8 @@ BDATE=`date +%m-%d`
 
 if [ $1 = "y" ]; then
 PUSH=true
+else
+PUSH=false
 fi
 
 if [ ! -d "${COPY_DIR}/${BDATE}" ]; then
@@ -42,6 +44,7 @@ find ${OUT} '(' -name 'OctOS*' -size +150000k ')' -print0 |
                 cp "${FILENAME}.md5sum" ${COPY_DIR}/${BDATE}/${FILENAME##*/}.md5
                 echo "Removing old .MD5 file ${FILENAME}.md5sum"
                 rm ${OUT}/*.md5*
+		sed -i "s/OctOS-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-${BVARIANT}/${FILENAME##*/}/g" ota.xml
 
 		if ${PUSH}; then
      			echo "Removing existing file from remote."
