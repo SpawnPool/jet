@@ -12,4 +12,4 @@ PUSH=$1
 : ${BSPEED:="21"}
 : ${PUSH:=false}
 BVARIANT=`basename $0 | cut -f 1 -d "."`
-source build/bscript.sh ${PUSH} ${BSPEED} ${BVARIANT}
+jet/bscript.sh ${PUSH} ${BSPEED} ${BVARIANT}

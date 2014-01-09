@@ -5,7 +5,13 @@
 ## on behalf of Team Octos et al.
 
 source build/envsetup.sh
-source build/credentials.sh
+source jet/credentials.sh
+
+PUSH=$1
+BSPEED=$2
+: ${PUSH:=false}
+: ${BSPEED:="21"}
+BVARIANT=$3
 
 ## Clean Up Previous Builds
 make installclean
@@ -39,11 +45,10 @@ find ${OUT} '(' -name 'OctOS*' -size +150000k ')' -print0 |
 
 		if ${PUSH}; then
      			echo "Removing existing file from remote."
-			ssh ${RACF}@${RHOST} 'rm -rf ~/Carrier_ROMs/${BVARIANT}/*.zip' < /dev/null
+			ssh ${RACF}@${RHOST} 'rm -rf ${ROUT}/*.zip' < /dev/null
      			echo "Pushing new file ${FILENAME##/*} to remote"
                         scp ${FILENAME} ${RACF}@${RHOST}:${ROUT}/${BVARIANT}
 
 		fi
         done
-        
-        
+
