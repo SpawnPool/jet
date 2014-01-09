@@ -44,14 +44,19 @@ find ${OUT} '(' -name 'OctOS*' -size +150000k ')' -print0 |
                 cp "${FILENAME}.md5sum" ${COPY_DIR}/${BDATE}/${FILENAME##*/}.md5
                 echo "Removing old .MD5 file ${FILENAME}.md5sum"
                 rm ${OUT}/*.md5*
-		sed -i "s/OctOS-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-${BVARIANT}/${FILENAME##*/}/g" ota.xml
+		OTAFILE=`basename ${FILENAME} | cut -f 1 -d '.'`
 
 		if ${PUSH}; then
+			echo "Pulling OTA manifest"
+			scp ${RACF}@${RHOST}:public_html/ota.xml ota.xml
+			echo "Updating manifest for ${OTAFILE}"
+	                sed -i "s/OctOS-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-${BVARIANT}/${OTAFILE}/g" ota.xml
      			echo "Removing existing file from remote."
-			ssh ${RACF}@${RHOST} 'rm -rf ${ROUT}/*.zip' < /dev/null
-     			echo "Pushing new file ${FILENAME##/*} to remote"
+			ssh ${RACF}@${RHOST} 'rm -rf ${ROUT}/${BVARIANT}/*.zip' < /dev/null
+     			echo "Pushing new file ${FILENAME} to remote"
                         scp ${FILENAME} ${RACF}@${RHOST}:${ROUT}/${BVARIANT}
-
+			echo "Pushing new OTA manifest to remote"
+			scp ota.xml ${RACF}@${RHOST}:public_html/ota.xml
 		fi
         done
 
