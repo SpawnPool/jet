@@ -36,7 +36,7 @@ echo "Pushing to Remote after build!"
 fi
 # Build command
 brunch ${BVARIANT} -j${BSPEED}
-find ${OUT} '(' -name 'OctOS*' -size +150000k ')' -print0 |
+find ${OUT} '(' -name 'Oct*' -size +150000k ')' -print0 |
         xargs --null md5sum |
         while read CHECKSUM FILENAME
         do
@@ -45,7 +45,7 @@ find ${OUT} '(' -name 'OctOS*' -size +150000k ')' -print0 |
                 echo "Removing old .MD5 file ${FILENAME}.md5sum"
                 rm ${OUT}/*.md5*
 		OTAFILE=`basename ${FILENAME} | cut -f 1 -d '.'`
-
+		echo "Filename ${FILENAME} - OTAFILE: ${OTAFILE}"
 		if ${PUSH}; then
 			echo "Pulling OTA manifest"
 			scp ${RACF}@${RHOST}:public_html/ota.xml ota.xml
