@@ -14,7 +14,7 @@ BSPEED=$2
 BVARIANT=$3
 
 ## Clean Up Previous Builds as well as old md5sum files
-make installclean && rm -rf out/target/product/jfltevzw/*md5sum
+make installclean && rm -rf out/target/product/*/*md5sum
 
 ## Current Build Date
 BDATE=`date +%m-%d`
