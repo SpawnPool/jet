@@ -4,14 +4,14 @@
 ## Copywrite 2014 - Donald Hoskins <grommish@gmail.com>
 ## on behalf of Team Octos et al.
 
-source build/envsetup.sh
-source jet/credentials.sh
-
 PUSH=$1
 BSPEED=$2
 : ${PUSH:=false}
 : ${BSPEED:="21"}
 BVARIANT=$3
+
+source build/envsetup.sh
+source jet/credentials.sh
 
 echo "Setting Lunch Menu to ${BVARIANT}"
 lunch oct_${BVARIANT}-userdebug
