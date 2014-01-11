@@ -49,6 +49,7 @@ find ${OUT} '(' -name 'Oct*' -size +150000 ')' -print0 |
 		echo "Filename ${FILENAME} - OTAFILE: ${OTAFILE}"
 		if ${PUSH}; then
 			if [ -e ota.xml ]; then
+			    echo "Cleaning old OTA manifest"
 			    rm ota.xml
 			fi
 			echo "Pulling OTA manifest"
