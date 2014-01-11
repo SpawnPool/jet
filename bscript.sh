@@ -13,8 +13,11 @@ BSPEED=$2
 : ${BSPEED:="21"}
 BVARIANT=$3
 
+echo "Setting Lunch Menu to ${BVARIANT}"
+lunch oct_${BVARIANT}-userdebug
+
 ## Clean Up Previous Builds as well as old md5sum files
-make installclean && rm -rf out/target/product/jfltevzw/*md5sum
+make installclean && rm ${OUT}/*md5*
 
 ## Current Build Date
 BDATE=`date +%m-%d`
@@ -36,24 +39,25 @@ echo "Pushing to Remote after build!"
 fi
 # Build command
 brunch ${BVARIANT} -j${BSPEED}
-find ${OUT} '(' -name 'Oct*' -size +150000k ')' -print0 |
+find ${OUT} '(' -name 'Oct*' -size +150000 ')' -print0 |
         xargs --null md5sum |
         while read CHECKSUM FILENAME
         do
                 cp ${FILENAME} ${COPY_DIR}/${BDATE}/${FILENAME##*/}
                 cp "${FILENAME}.md5sum" ${COPY_DIR}/${BDATE}/${FILENAME##*/}.md5
-                echo "Removing old .MD5 file ${FILENAME}.md5sum"
-                rm ${OUT}/*.md5*
 		OTAFILE=`basename ${FILENAME} | cut -f 1 -d '.'`
 		echo "Filename ${FILENAME} - OTAFILE: ${OTAFILE}"
 		if ${PUSH}; then
+			if [ -e ota.xml ]; then
+			    rm ota.xml
+			fi
 			echo "Pulling OTA manifest"
-			scp ${RACF}@${RHOST}:public_html/ota.xml ota.xml
+			wget http://www.teamoctos.com/ota.xml
 			echo "Updating manifest for ${OTAFILE}"
-	                sed -i "s/OctOS-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-${BVARIANT}/${OTAFILE}/g" ota.xml
+	                sed -i "s/Oct-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-${BVARIANT}/${OTAFILE}/g" ota.xml
      			echo "Removing existing file from remote."
-			ssh ${RACF}@${RHOST} 'rm -rf ${ROUT}/${BVARIANT}/*.zip' < /dev/null
-     			echo "Pushing new file ${FILENAME} to remote"
+			ssh ${RACF}@${RHOST} "rm -rf ${ROUT}/${BVARIANT}/*.zip" < /dev/null
+     			echo "Pushing new file ${OTAFILE} to remote"
                         scp ${FILENAME} ${RACF}@${RHOST}:${ROUT}/${BVARIANT}
 			echo "Pushing new OTA manifest to remote"
 			scp ota.xml ${RACF}@${RHOST}:public_html/ota.xml
