@@ -43,8 +43,11 @@ find ${OUT} '(' -name 'Oct*' -size +150000 ')' -print0 |
         xargs --null md5sum |
         while read CHECKSUM FILENAME
         do
+		if ! $PUSH; then
+		echo "Moving to Copybox"
                 cp ${FILENAME} ${COPY_DIR}/${BDATE}/${FILENAME##*/}
                 cp "${FILENAME}.md5sum" ${COPY_DIR}/${BDATE}/${FILENAME##*/}.md5
+		fi
 		OTAFILE=`basename ${FILENAME} | cut -f 1 -d '.'`
 		echo "Filename ${FILENAME} - OTAFILE: ${OTAFILE}"
 		if ${PUSH}; then
