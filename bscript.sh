@@ -65,6 +65,8 @@ find ${OUT} '(' -name 'Oct*' -size +150000 ')' -print0 |
                         scp ${FILENAME} ${RACF}@${RHOST}:${ROUT}/${BVARIANT}
 			echo "Pushing new OTA manifest to remote"
 			scp ota.xml ${RACF}@${RHOST}:public_html/ota.xml
+			echo "Triggering Sync"
+			curl ${RSYNC}
 		fi
         done
 
