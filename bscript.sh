@@ -50,7 +50,7 @@ find ${OUT} '(' -name 'Oct*' -size +150000 ')' -print0 |
 			echo "Moving to Copybox"
                 	cp ${FILENAME} ${COPY_DIR}/${BDATE}/${FILENAME##*/}
                 	cp "${FILENAME}.md5sum" ${COPY_DIR}/${BDATE}/${FILENAME##*/}.md5
-		fi	fi
+			fi
 		OTAFILE=`basename ${FILENAME} | cut -f 1 -d '.'`
 		echo "Filename ${FILENAME} - OTAFILE: ${OTAFILE}"
 		if ${PUSH}; then
@@ -71,5 +71,6 @@ find ${OUT} '(' -name 'Oct*' -size +150000 ')' -print0 |
 			echo "Triggering Sync"
 			curl ${RSYNC}
 		fi
+	fi
         done
 
