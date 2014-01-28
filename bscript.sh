@@ -31,6 +31,7 @@ fi
 if [ ! -d "${COPY_DIR}/${BDATE}" ]; then
 	echo "Creating directory for ${COPY_DIR}/${BDATE}"
 	mkdir -p ${COPY_DIR}/${BDATE}
+	chmod 775 ${COPY_DIR}/${BDATE}
 fi
 
 echo "Starting brunch with ${BSPEED} threads for ${COPY_DIR}"
