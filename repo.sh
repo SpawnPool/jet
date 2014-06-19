@@ -7,4 +7,6 @@
 cd ".repo/local_manifests"
 git pull origin master
 cd "../.."
-repo sync
+RDATE=`date +"%m-%d-%y %T"`
+echo $RDATE >> Repo_ChangeLog
+repo sync | egrep '(From)|(->)' >> Repo_ChangeLog
