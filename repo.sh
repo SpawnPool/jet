@@ -10,19 +10,69 @@
 ## Usage: jet/repo.sh <branch>
 ## jet/repo.sh sam, jet/repo.sh nex, etc
 ##
-## Defaults to master branch (all devices) unless specified.
-
+##
+CWD=$(pwd)
 DEVICE_TREE=$1
-: ${DEVICE_TREE:="master"}
+MANI_REPO="vendor/common/prebuilt/manifests"
+VENDOR_REPO="vendor/common"
 
-cd ".repo/local_manifests"
-git checkout $DEVICE_TREE
-git pull origin $DEVICE_TREE
+cd $VENDOR_REPO
+echo "Updating Repo"
+git fetch sp
+git pull sp kk-4.4
+echo "Done Updating"
+cd $CWD
 
-cd "../.."
-RDATE=`date +"%m-%d-%y %T"`
-echo $RDATE >> Repo_ChangeLog
-#repo sync 2>tmp &&  egrep '(From)|(->)' tmp >> Repo_ChangeLog
+if [[ $DEVICE_TREE = "" ]]
+  then
+  max_columns=4
+  icount=0
+  echo "Pick a device tree from the following sources:"
+  echo "Use 'base' as a repo name to just sync the OctOs/CM required Repos"
+  echo "/******************************************************************************"
+  for entry in "$MANI_REPO"/*
+  do
+    repname=$(basename $entry)
+    if [[ $repname = "cm.xml" || $repname = "oct.xml" || $repname = "README" ]]
+    then
+      continue
+    fi
+
+    if [[ icount -eq 0 ]]
+    then
+       printf "/\t${repname%.xml}\t\t"
+       icount=$((icount+1))
+       continue
+    fi
+    if [[ icount -gt 0 && icount -lt $max_columns ]]
+    then
+       printf "${repname%.xml}\t\t"
+       icount=$((icount+1))
+       continue
+    else
+      printf "${repname%.xml}\r\n"
+      icount=0
+    fi
+  done
+  printf "\r\n"
+  exit
+fi
+
+cd $CWD
+
+if [ ! -d ".repo/local_manifests" ]; then
+  mkdir -p ".repo/local_manifests"
+fi
+touch ".repo/local_manifests/OctOs.xml"
+cat "$MANI_REPO/oct.xml" > ".repo/local_manifests/OctOs.xml"
+cat "$MANI_REPO/cm.xml" >> ".repo/local_manifests/OctOs.xml"
+if [[ $DEVICE_TREE != "base" ]]
+   then
+    for DEVICE_TREE in "$@"
+    do
+      cat "$MANI_REPO/$DEVICE_TREE.xml" >> ".repo/local_manifests/OctOs.xml"
+    done
+fi
+echo "</manifest>" >> ".repo/local_manifests/OctOs.xml"
 
 repo sync
-
