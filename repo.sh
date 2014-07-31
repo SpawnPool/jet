@@ -19,7 +19,7 @@ VENDOR_REPO="vendor/common"
 cd $VENDOR_REPO
 echo "Updating Repo"
 git fetch sp
-git pull sp kk-4.4
+git pull sp test
 echo "Done Updating"
 cd $CWD
 
@@ -60,19 +60,12 @@ fi
 
 cd $CWD
 
-if [ ! -d ".repo/local_manifests" ]; then
-  mkdir -p ".repo/local_manifests"
-fi
-touch ".repo/local_manifests/OctOs.xml"
-cat "$MANI_REPO/oct.xml" > ".repo/local_manifests/OctOs.xml"
-cat "$MANI_REPO/cm.xml" >> ".repo/local_manifests/OctOs.xml"
 if [[ $DEVICE_TREE != "base" ]]
    then
     for DEVICE_TREE in "$@"
     do
-      cat "$MANI_REPO/$DEVICE_TREE.xml" >> ".repo/local_manifests/OctOs.xml"
+      cp "$MANI_REPO/$DEVICE_TREE.xml" ".repo/local_manifests/$DEVICE_TREE.xml"
     done
 fi
-echo "</manifest>" >> ".repo/local_manifests/OctOs.xml"
 
 repo sync
