@@ -79,13 +79,15 @@ fi
 ## Check to see if the local manifest is different from prebuilt
 for DEVICE_TREE in ".repo/local_manifests"/*
   do
-    if [[ $DEVICE_TREE = "aosp_spawnpool.xml" ]]
+    repname=$(basename $DEVICE_TREE)
+    if [[ $repname = "aosp_spawnpool.xml" ]]
     then
       continue
     fi
-    if [[ `diff -q $CWD/.repo/local_manifests/$DEVICE_TREE.xml $CWD/${MANI_REPO}/$DEVICE_TREE.xml` ]]
+    if [[ `diff -q $CWD/.repo/local_manifests/$repname $CWD/${MANI_REPO}/$repname` ]]
     then
-      cp "$CWD/$MANI_REPO/$DEVICE_TREE.xml" "$CWD/.repo/local_manifests/$DEVICE_TREE.xml"
+      echo "Updating local manifest for $repname"
+      cp "$CWD/$MANI_REPO/$repname" "$CWD/.repo/local_manifests/$repname"
     fi
   done
 
