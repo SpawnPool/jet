@@ -19,7 +19,7 @@ VENDOR_REPO="vendor/common"
 cd $VENDOR_REPO
 echo "Updating Repo"
 git fetch sp
-git pull sp test
+git pull sp octos
 echo "Done Updating"
 cd $CWD
 
