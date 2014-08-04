@@ -83,10 +83,10 @@ for DEVICE_TREE in ".repo/local_manifests/$@"
     then
       continue
     fi
-    if [[ `diff -q ".repo/local_manifests/$DEVICE_TREE.xml" "${MANI_REPO}/$DEVICE_TREE.xml"` ]]
+    if [[ `diff -q .repo/local_manifests/$DEVICE_TREE.xml ${MANI_REPO}/$DEVICE_TREE.xml` ]]
     then
       cp "$MANI_REPO/$DEVICE_TREE.xml" ".repo/local_manifests/$DEVICE_TREE.xml"
     fi
   done
 
-repo sync
+## repo sync
