@@ -71,6 +71,7 @@ if [[ $DEVICE_TREE == "clean" ]]
     fi
    rm ".repo/local_manifests/${repname}"
   done  
+  exit
 fi
 
 if [[ $DEVICE_TREE != "base" ]]
