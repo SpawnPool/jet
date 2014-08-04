@@ -72,7 +72,7 @@ if [[ $DEVICE_TREE == "clean" ]]
       continue
     fi
    rm ".repo/local_manifests/${repname}"
-  done  
+  done
   exit
 fi
 
@@ -91,4 +91,12 @@ for DEVICE_TREE in ".repo/local_manifests"/*
     fi
   done
 
-## repo sync
+## Add repos
+  for DEVICE_TREE in "$MANI_REPO/$@"
+    do
+      repname=$(basename $DEVICE_TREE)
+      echo "Adding $DEVICE_TREE to local manifests"
+      cp $MANI_REPO/$repname.xml .repo/local_manifests/$repname.xml
+  done
+
+repo sync
