@@ -77,15 +77,15 @@ if [[ $DEVICE_TREE == "clean" ]]
 fi
 
 ## Check to see if the local manifest is different from prebuilt
-for DEVICE_TREE in ".repo/local_manifests/$@"
+for DEVICE_TREE in ".repo/local_manifests"/*
   do
     if [[ $DEVICE_TREE = "aosp_spawnpool.xml" ]]
     then
       continue
     fi
-    if [[ `diff -q $DEVICE_TREE.xml $CWD/${MANI_REPO}/$DEVICE_TREE.xml` ]]
+    if [[ `diff -q $CWD/.repo/local_manifests/$DEVICE_TREE.xml $CWD/${MANI_REPO}/$DEVICE_TREE.xml` ]]
     then
-      cp "$CWD/$MANI_REPO/$DEVICE_TREE.xml" "$DEVICE_TREE.xml"
+      cp "$CWD/$MANI_REPO/$DEVICE_TREE.xml" "$CWD/.repo/local_manifests/$DEVICE_TREE.xml"
     fi
   done
 
