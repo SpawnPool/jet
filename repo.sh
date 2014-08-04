@@ -95,7 +95,7 @@ for DEVICE_TREE in ".repo/local_manifests"/*
   for DEVICE_TREE in "$MANI_REPO/$@"
     do
       repname=$(basename $DEVICE_TREE)
-      echo "Adding $DEVICE_TREE to local manifests"
+      echo "Adding $repname to local manifests"
       cp $MANI_REPO/$repname.xml .repo/local_manifests/$repname.xml
   done
 
