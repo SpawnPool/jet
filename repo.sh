@@ -23,6 +23,7 @@ git pull sp test
 echo "Done Updating"
 cd $CWD
 
+## List Available Device/Device Trees
 if [[ $DEVICE_TREE = "" ]]
   then
   max_columns=4
@@ -59,6 +60,7 @@ fi
 
 cd $CWD
 
+## Remove all existing local_manifests except Spawnpool
 if [[ $DEVICE_TREE == "clean" ]]
   then
    echo "Removing existing device trees"
@@ -74,12 +76,16 @@ if [[ $DEVICE_TREE == "clean" ]]
   exit
 fi
 
-if [[ $DEVICE_TREE != "base" ]]
-   then
-    for DEVICE_TREE in "$@"
-    do
+## Check to see if the local manifest is different from prebuilt
+for DEVICE_TREE in ".repo/local_manifests/$@"
+  do
+    if [[ $DEVICE_TREE = "aosp_spawnpool.xml" ]]
+    then
+      continue
+    fi
+    if [[ `diff -q ".repo/local_manifests/$DEVICE_TREE.xml" "${MANI_REPO}/$DEVICE_TREE.xml"` ]]
       cp "$MANI_REPO/$DEVICE_TREE.xml" ".repo/local_manifests/$DEVICE_TREE.xml"
-    done
-fi
+    fi
+  done
 
 repo sync
