@@ -83,9 +83,9 @@ for DEVICE_TREE in ".repo/local_manifests/$@"
     then
       continue
     fi
-    if [[ `diff -q $CWD/.repo/local_manifests/$DEVICE_TREE.xml $CWD/${MANI_REPO}/$DEVICE_TREE.xml` ]]
+    if [[ `diff -q $DEVICE_TREE.xml $CWD/${MANI_REPO}/$DEVICE_TREE.xml` ]]
     then
-      cp "$MANI_REPO/$DEVICE_TREE.xml" ".repo/local_manifests/$DEVICE_TREE.xml"
+      cp "$CWD/$MANI_REPO/$DEVICE_TREE.xml" "$DEVICE_TREE.xml"
     fi
   done
 
