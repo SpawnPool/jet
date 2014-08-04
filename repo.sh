@@ -61,6 +61,7 @@ cd $CWD
 
 if [[ $DEVICE_TREE == "clean" ]]
   then
+   echo "Removing existing device trees"
    for entry in ".repo/local_manifests"/*
    do
     repname=$(basename $entry)
@@ -68,7 +69,6 @@ if [[ $DEVICE_TREE == "clean" ]]
     then
       continue
     fi
-   echo "Removing existing device trees"
    rm ".repo/local_manifests/${repname}"
   done  
 fi
