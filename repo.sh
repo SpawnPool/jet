@@ -27,8 +27,7 @@ if [[ $DEVICE_TREE = "" ]]
   then
   max_columns=4
   icount=0
-  echo "Pick a device tree from the following sources:"
-  echo "Use 'base' as a repo name to just sync the OctOs/CM required Repos"
+  echo "Pick device tree(s) from the following sources:"
   echo "/******************************************************************************"
   for entry in "$MANI_REPO"/*
   do
@@ -59,6 +58,20 @@ if [[ $DEVICE_TREE = "" ]]
 fi
 
 cd $CWD
+
+if [[ $DEVICE_TREE == "clean" ]]
+  then
+   for entry in ".repo/local_manifests"/*
+   do
+    repname=$(basename $entry)
+    if [[ $repname = "aosp_spawnpool.xml" ]]
+    then
+      continue
+    fi
+   echo "Removing existing device trees"
+   rm ".repo/local_manifests/${repname}"
+  done  
+fi
 
 if [[ $DEVICE_TREE != "base" ]]
    then
