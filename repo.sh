@@ -103,4 +103,4 @@ for DEVICE_TREE in ".repo/local_manifests"/*
       cp $MANI_REPO/$repname.xml .repo/local_manifests/$repname.xml
   done
 
-repo sync
+# repo sync
